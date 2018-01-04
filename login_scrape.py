@@ -1,31 +1,83 @@
 import re
 from robobrowser import RoboBrowser
 from blackboard_credentials import username, password
+import time
 
-# Browse to Genius
-browser = RoboBrowser(history=True)
+
+# goes to blackboard login page
+browser = RoboBrowser(parser= "html.parser", history=True)
 browser.open('https://blackboard.stonybrook.edu/webapps/login/')
-print browser
+
+# gets the appropiate login form and inputs login credentials
 form = browser.get_forms()[1]
 form
 form['user_id'].value = username
 form['password'].value = password
 browser.submit_form(form)
 
+# navigate to grade tab
 browser.open("https://blackboard.stonybrook.edu/webapps/bb-social-learning-bb_bb60/execute/mybb?cmd=display&toolId=MyGradesOnMyBb_____MyGradesTool")
-src = browser.select("#iframe_wrap")
 
+
+# navigate to actual grade div 
 browser.open("https://blackboard.stonybrook.edu/webapps/bb-mygrades-bb_bb60/myGrades?course_id=_1131150_1&stream_name=mygrades")
+
+# get all info regarding grade 
 grade_html =  str(browser.select(".grade"))
 
 
-pattern = re.compile('\"0\">\d+\.\d\d+')
+def get_score(grade_string):
 
-grades = re.findall(pattern, grade_html)
-grades = list(set(grades))
+	pattern = re.compile('\"0\">\d+\.\d\d+<\/span><')
 
-for grade in range(len(grades)):
-	grade_value = grades[grade][4:]
-	grades[grade] = float(grade_value)
+	grades = re.findall(pattern, grade_string)
 
-print grades
+	for grade in range(len(grades)):
+		grade_value = grades[grade][4:len(grades[grade])-8]
+		grades[grade] = float(grade_value)
+
+	return grades
+
+
+def get_points_possible(possible_string):
+	pattern = re.compile('\d+')
+	points_possible = re.findall(pattern, possible_string)
+
+	for points in range(len(points_possible)):
+
+		points_possible[points] = float(points_possible[points])
+
+	return points_possible
+
+
+scores = get_score(grade_html)
+print "Scores: ", scores
+possible_html = str(browser.select(".pointsPossible"))
+points_possible = get_points_possible(possible_html)
+print "Possible Points: " , points_possible
+
+print str(browser.select(".itemCat"))
+
+
+browser.open("https://blackboard.stonybrook.edu/webapps/bb-mygrades-bb_bb60/myGrades?course_id=_1131160_1&stream_name=mygrades")
+grade_html = str(browser.select(".grade"))
+scores = get_score(grade_html)
+print "Scores: ", scores
+possible_html = str(browser.select(".pointsPossible"))
+points_possible = get_points_possible(possible_html)
+print "Possible Points: " , points_possible
+
+browser.open("https://blackboard.stonybrook.edu/webapps/bb-mygrades-bb_bb60/myGrades?course_id=_1133163_1&stream_name=mygrades")
+grade_html = str(browser.select(".grade"))
+scores = get_score(grade_html)
+print "Scores: ", scores
+possible_html = str(browser.select(".pointsPossible"))
+points_possible = get_points_possible(possible_html)
+print "Possible Points: " , points_possible
+
+
+
+
+
+
+
