@@ -50,14 +50,25 @@ def get_points_possible(possible_string):
 	return points_possible
 
 
+def get_grade_type(grade_type_string):
+	pattern = re.compile('>\w+')
+	grade_types = re.findall(pattern, grade_type_string)
+
+	for i in range(len(grade_types)):
+
+		grade_types[i] = grade_types[i][1:]
+
+	return grade_types
+
+
 scores = get_score(grade_html)
 print "Scores: ", scores
 possible_html = str(browser.select(".pointsPossible"))
 points_possible = get_points_possible(possible_html)
 print "Possible Points: " , points_possible
-
-print str(browser.select(".itemCat"))
-
+grade_type_string = str(browser.select(".itemCat"))
+grade_types = get_grade_type(grade_type_string)
+print "Grade Types: ", grade_types
 
 browser.open("https://blackboard.stonybrook.edu/webapps/bb-mygrades-bb_bb60/myGrades?course_id=_1131160_1&stream_name=mygrades")
 grade_html = str(browser.select(".grade"))
