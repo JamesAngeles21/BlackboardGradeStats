@@ -2,10 +2,12 @@ import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
+from selenium.webdriver.chrome.options import Options
 
+options = Options() 
+options.add_argument("--start-maximized") 
 
-
-driver = webdriver.Chrome()
+driver=webdriver.Chrome(chrome_options=options) 
 driver.get("https://psns.cc.stonybrook.edu/psp/csprods/EMPLOYEE/CAMP/?cmd=login")
 username = driver.find_element_by_id('userid')
 password = driver.find_element_by_id('pwd')
@@ -25,13 +27,17 @@ sleep(8)
 if len(driver.window_handles) < 2:
 	sleep(10)
 
+while len(driver.window_handles) < 2:
+	print "Waiting for next browser..."
+	sleep(5)
+
 driver.switch_to.window(driver.window_handles[1])
 
 driver.get("https://stonybrook.collegescheduler.com/terms/Spring%202018/options")
-sleep(2)
+
+sleep(5)
 
 shopping_cart = driver.find_elements_by_class_name("shopping-cart")
-
 
 def parse_shopping_cart(shopping_cart):
 
@@ -67,16 +73,6 @@ def parse_shopping_items(shopping_strings):
 
 	return shopping_items
 
-
-shopping_strings = parse_shopping_cart(shopping_cart)
-shopping_items = parse_shopping_items(shopping_strings)
-
-for item in shopping_items:
-	print item['subject'], item['setting']
-
-
-
-
 def find_correct_course(shopping_item):
 	course = shopping_item['subject']
 	xpath = '//*[strong= "'+ str(course) + '"]'
@@ -85,6 +81,14 @@ def find_correct_course(shopping_item):
 	course_id = course_item.get_attribute("data-id")
 	driver.get("https://stonybrook.collegescheduler.com/terms/Spring%202018/courses/" + str(course_id))
 
+
+
+
+shopping_strings = parse_shopping_cart(shopping_cart)
+shopping_items = parse_shopping_items(shopping_strings)
+
+for item in shopping_items:
+	print item['subject'], item['setting']
 
 find_correct_course(shopping_items[1])
 
