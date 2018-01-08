@@ -1,6 +1,0 @@
-username = "110875002"
-password = "008009756"
-client_id = "AC53174208801707c89ef3a2be3ea1edf7"
-api_key = "e30e1054d278610182852fb33ba9927c"
-my_number = "+18458931688"
-twilio_number = "+18623367112"
