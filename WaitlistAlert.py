@@ -235,6 +235,7 @@ def check_courses(shopping_items):
 			sleep(5)		# sleep to account for page loading
 
 		count += 1 			# increase iteration count
+		sleep(60)			# checks class availability every minute 
 		open_schedule_builder()		# reopen schedule builder after all course sections are checked in order to check for updates
 		sleep(5)		# account for page loading
 
