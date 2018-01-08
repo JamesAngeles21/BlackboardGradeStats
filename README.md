@@ -3,11 +3,11 @@ Utilizes Selenium library and Twilio API to send a text alert when a desired SB 
 
 # Getting Set Up
 
-Create a credentials.py file in same location as WaitlistAlert.py
-Pull all pertinent information in there:
-Solar username --> username
-Solar password --> password
-Twilio account SID --> client_id
+Create a credentials.py file in same location as WaitlistAlert.py \n
+Pull all pertinent information in there: \n
+Solar username --> username \n
+Solar password --> password \n
+Twilio account SID --> client_id \n
 Twilio Auth Token --> api_key
 Phone Number --> my_number
 Twilio Number --> twilio_number
